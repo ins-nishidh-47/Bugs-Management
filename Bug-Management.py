@@ -22,7 +22,7 @@ def codestatus():
     easy.update('buginfo', 'bugstatus', choice, f"bugID = '{bugID}'")
     os.system('clear')
     print('Updating ....'), time.sleep(3)
-    print('Updated Successfully')
+    print('------------------- Updated Successfully -------------------')
 
 def addbug():
     id = easy.bugID()
@@ -35,8 +35,8 @@ def addbug():
     priority = int(input("PRIORITY => {1:'high', 2:'Medium', 3:'low'} Enter (1/2/3): "))
     assign_to = str(input('Enter the name of the assigne: '))
     assign_by = str(input('Enter the name of bug assigner: '))
-    cur.execute(f"insert into buginfo values {(id,bugstatus, bugds, severity, reqdays, opendt, closingdt, priority)}"), db.commit()
-    cur.execute(f"insert into assign (assign_to,assigned_by,bugID) values {(assign_to,assign_by,id)}"), db.commit()
+    cur.execute(f"insert into buginfo values ('{id}','{bugstatus}', '{bugds}', '{severity}', {reqdays}, '{opendt}', '{closingdt}', {priority})"), db.commit()
+    cur.execute(f"insert into assign (assign_to,assigned_by,bugID) values ('{assign_to}','{assign_by}','{id}')"), db.commit()
     print('------------------ BUG SUCCESSFULLY UPDATED ------------------'), time.sleep(4)
     work()
 
@@ -47,7 +47,7 @@ def bugreport():  #edit code status
     print('Current Code Status => ')
     """ CAN  USE TABULATE LIBRARY BUT ALREADY USED TOO MANY ${NOT TO TAKE BURDEN}"""
     status = easy.select('buginfo', '*', 1, f"bugID = '{id}'") 
-    print(f"\n {id}                                        Bug Status : {actualsts[list(status)[1]]}\n\n Description : {list(status)[2]} \n\n Severity : {list(status)[3]}                                        Fixing Days : {list(status)[4]}               \n\n Opening Date : {list(status)[5]}                      closing date : {list(status)[6]} \n")
+    print(f"\n {id}                                        Bug Status : {actualsts[list(status)[1]]}\n\n Description : {list(status)[2]} \n\n Severity : {list(status)[3]}                                        Fixing Days : {list(status)[4]}               \n\n Opening Date : {list(status)[5]}                      closing date : {list(status)[6]} \n \n \n")
 def assignes():#switch assignes
     id = easy.bugID()
     if (id != None):
@@ -74,6 +74,7 @@ def assignes():#switch assignes
         print('( username , Email )\n', *(i for i in details), sep='\n')
         time.sleep(4)
     elif (choice == 2):
+        details = []
         email = str(input('Enter the EmailID of the person : '))
         easy.update('assign', 'assign_to', email, f"bugID = '{id}'")
     else:
