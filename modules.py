@@ -31,7 +31,7 @@ def select(tablename, first: str, tofetch: int, condition: str = None):
     else:return cur.fetchall()
 
 def update(tablename, column, value, condition: str):
-    if value.isdigit() != True:
+    if str(value).isdigit() != True:
         newval = 1
         try:
             newval = float(value)
