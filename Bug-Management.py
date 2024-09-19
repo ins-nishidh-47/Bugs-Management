@@ -3,6 +3,7 @@ import modules as easy
 import os
 import time
 
+#checking
 # actualsts = {1:'Intest', 2:'Open', 3:'Close', 4:'Reopen', 5:'Inprogress'}
 
 # Connect to MySQL
