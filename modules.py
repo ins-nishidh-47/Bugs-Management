@@ -1,8 +1,8 @@
 import random
 import mysql.connector as m 
 import os 
-db = m.connect(host="localhost", user="root", passwd="nishidh@123", database="bug_tracking")
-
+db = m.connect(host="localhost", user="root", passwd="1234", database="bug_tracking")
+#cursor object
 cur = db.cursor()
 
 def cleared():

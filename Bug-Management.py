@@ -6,7 +6,7 @@ import time
 # actualsts = {1:'Intest', 2:'Open', 3:'Close', 4:'Reopen', 5:'Inprogress'}
 
 # Connect to MySQL
-db = mysql.connect(host="localhost", user="root", passwd="nishidh@123", database="bug_tracking")
+db = mysql.connect(host="localhost", user="root", passwd="1234", database="bug_tracking")
 cur = db.cursor()  #creating cursor
 
 def credentials():  #taking credentials
@@ -63,6 +63,7 @@ def assignes():#switch assignes
             os.system('clear')
             # print(f'Current Assignee => {cur.fetchone()}' if cur.fetchone!= None else print('-------------- BugID not found --------------'), time.sleep(4) ,assignes())
             bugdetails = cur.fetchone()
+            print(bugdetails)
             if bugdetails!= None:
                 print(f'Current Assignee => {bugdetails}')
             else:
