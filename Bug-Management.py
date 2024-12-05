@@ -6,7 +6,13 @@ import time
 # actualsts = {1:'Intest', 2:'Open', 3:'Close', 4:'Reopen', 5:'Inprogress'}
 
 # Connect to MySQL
-db = mysql.connect(host="localhost", user="root", passwd="1234", database="bug_tracking")
+db = mysql.connect(host="localhost", user="ins-nishidh", passwd="ins-nishidh-@47", database="bugs", ssl_disabled=True)
+
+
+
+
+
+
 cur = db.cursor()  #creating cursor
 
 def credentials():  #taking credentials
@@ -57,7 +63,7 @@ def bugreport():  #edit code status
 def assignes():#switch assignes
     try:
         id = easy.bugID()
-        if (id != None):
+        if (id != ""):
             cur.execute(f"select assign_to,bugID,assigned_by from assign where bugID = '{id}'")
             print('fetching Assignes ... '), time.sleep(3)
             os.system('clear')
@@ -72,7 +78,7 @@ def assignes():#switch assignes
                 if inpu == '':
                     allbugs(), print()
                 assignes()
-        elif (id == None):
+        elif (id == ""):
             id = input('Enter the bugID')# if the bugID is not present
             cur.execute(f"select assign_to from assign where bugID = '{id}'")
             print(f'Current Assignee => {cur.fetchone()}')
@@ -118,7 +124,8 @@ def assignes():#switch assignes
 
 def allbugs():
     os.system('clear')
-    print('fetching data ... '), time.sleep(4)
+    # print('fetching data ... '), time.sleep(4)
+    easy.loading_bar(100, bar_width=70, delay=0.05), time.sleep(4)
     os.system('clear')
     print('--------------------------------- All Bugs ---------------------------------')
     cur.execute("select * from buginfo")
@@ -182,5 +189,28 @@ def user_login():  #login/Signin
 
     verification(choice)
 
+logo = """
+▒█▀▀█ ▒█░▒█ ▒█▀▀█ ▒█▀▀▀█      ▒█▀▀█ ▒█▀▀█ ▒█▀▀▀█ 
+▒█▀▀▄ ▒█░▒█ ▒█░▄▄ ░▀▀▀▄▄  ▀▀  ▒█▄▄█ ▒█▄▄▀ ▒█░░▒█ 
+▒█▄▄█ ░▀▄▄▀ ▒█▄▄█ ▒█▄▄▄█      ▒█░░░ ▒█░▒█ ▒█▄▄▄█ 
 
-user_login()
+▒█▀▀▀█ ▀▀█▀▀ ░█▀▀█ ▒█▀▀█ ▀▀█▀▀ ▀█▀ ▒█▄░▒█ ▒█▀▀█ 
+░▀▀▀▄▄ ░▒█░░ ▒█▄▄█ ▒█▄▄▀ ░▒█░░ ▒█░ ▒█▒█▒█ ▒█░▄▄ 
+▒█▄▄▄█ ░▒█░░ ▒█░▒█ ▒█░▒█ ░▒█░░ ▄█▄ ▒█░░▀█ ▒█▄▄█ 
+
+                
+    █▀█ █▀█ █▀▀ █▀ █▀   █▀▀ █▄░█ ▀█▀ █▀▀ █▀█
+    █▀▀ █▀▄ ██▄ ▄█ ▄█   ██▄ █░▀█ ░█░ ██▄ █▀▄
+    ________________________________________
+"""
+os.system("clear")
+print(logo)
+
+if input("") == "":
+    print("🅷🅸🆃🆃🅸🅽🅶 🆁🅴🆀🆄🅴🆂🆃")
+    user_login()
+else:
+    os.system("clear")
+    print("exiting....")
+    os.system("clear")
+    
