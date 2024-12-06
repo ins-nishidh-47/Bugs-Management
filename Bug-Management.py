@@ -8,11 +8,6 @@ import time
 # Connect to MySQL
 db = mysql.connect(host="localhost", user="ins-nishidh", passwd="ins-nishidh-@47", database="bugs", ssl_disabled=True)
 
-
-
-
-
-
 cur = db.cursor()  #creating cursor
 
 def credentials():  #taking credentials
@@ -24,6 +19,8 @@ def codestatus():
     time.sleep(3)
     os.system('clear')
     bugID = input('Enter the Id of your respective Bug : ')
+    if bugID == "":
+        work()
     print('\n',{1:'Intest', 2:'Open', 3:'Close', 4:'Reopen', 5:'Inprogress'})
     choice = int(input('Enter your choice (1/2/3/4/5) => '))
     easy.update('buginfo', 'bugstatus', choice, f"bugID = '{bugID}'")
@@ -34,6 +31,9 @@ def codestatus():
 def addbug():
     try:
         id = easy.bugID()
+        if id == "":
+            os.system('clear')
+            work()
         bugds = str(input('Enter the bug Description : '))
         severity = str(input('Enter the severity of the bug : '))
         bugstatus = str(input("{1:'Intest', 2:'Open', 3:'Close', 4:'Reopen', 5:'Inprogress'} Enter (1/2/3/4/5): " ))
@@ -45,6 +45,7 @@ def addbug():
         assign_by = str(input('Enter the name of bug assigner: '))
         cur.execute(f"insert into buginfo values ('{id}','{bugstatus}', '{bugds}', '{severity}', {reqdays}, '{opendt}', '{closingdt}', {priority})"), db.commit()
         cur.execute(f"insert into assign (assign_to,assigned_by,bugID) values ('{assign_to}','{assign_by}','{id}')"), db.commit()
+        os.system('clear'), easy.loading_bar(100, bar_width=70, delay=0.05)
         print('------------------ BUG SUCCESSFULLY UPDATED ------------------'), time.sleep(4)
         work()
     except:
@@ -133,7 +134,7 @@ def allbugs():
     print("PRIORITY => {1:'high', 2:'Medium', 3:'low'}")
 
 def work():
-    print('--------------------------------- What you want to do ---------------------------------\n {1} => Edit code status \n {2} => Switch Assignes \n {3} => Bug Report \n {4} => See All bugs \n {5} => Add bugs \n {6} => logout / login ')
+    print('--------------------------------- What you want to do ---------------------------------\n {1} => Edit code status \n {2} => Switch Assignes \n {3} => Bug Report \n {4} => See All bugs \n {5} => Add bugs \n {6} => logout / login \n {7} => EXIT ')
     newchoice = int(input('Enter your choice'))
     if newchoice == 1:
         codestatus()
@@ -150,46 +151,64 @@ def work():
         addbug()
     elif newchoice == 6:
         user_login()
+    elif newchoice == 7:
+        easy.load(), time.sleep(4)
+        os.system('kill $$')
+        os.system('clear')
 
 def user_login():  #login/Signin
-    time.sleep(2),os.system('clear')
-    print('--------------------------------- Login / Singup ---------------------------------')
-    print(' {1}=>(login) \n {2}=>(singup)')
-    choice = int(input('Enter your choice'))
-    if (choice == 1):
-        print('--------------------------------- Login Here ---------------------------------')
-        credentials() # home page if the credentials didn't match then again login
-    elif (choice == 2):
-        print('--------------------------------- Signup Here ---------------------------------')
-        username = str(input('Enter your Name : '))
-        # cur.execute(f"select username from userinfo where {username} = '';")
-        credentials()
-    else:
-        print('--------------------------------- Some Error occurred ---------------------------------')
+    try:
+        time.sleep(2),os.system('clear')
+        print('--------------------------------- Login / Singup ---------------------------------')
+        print(' {1}=>(login) \n {2}=>(singup)')
+        choice = int(input('Enter your choice'))
+        if (choice == 1):
+            print('--------------------------------- Login Here ---------------------------------')
+            credentials() # home page if the credentials didn't match then again login
+        elif (choice == 2):
+            print('--------------------------------- Signup Here ---------------------------------')
+            username = str(input('Enter your Name : '))
+            # cur.execute(f"select username from userinfo where {username} = '';")
+            credentials()
+        else:
+            print('--------------------------------- Some Error occurred ---------------------------------')
+            user_login()
+        
+        def verification(choice):
+            if (choice == 1):
+                # cur.execute(f"select * from userinfo where email = '{email}' and password = '{password}'; ")
+                record = easy.select('userinfo', '*', 1, f"password = '{password}' and email = '{email}'")
+                if record != None:
+                    os.system('clear')
+                    print('Logged in successfully') # go to the main page
+                    work()
+                else:
+                    os.system('clear'),time.sleep(2)
+                    print('--------------------------------- Wrong Credentials ---------------------------------')
+                    user_login()
+            elif (choice == 2):
+                cur.execute(f"insert into userinfo (username,password,email,hash)values ('{username}','{password}','{email}','{easy.hashID()}')")
+                db.commit()
+                os.system('clear'),time.sleep(2)
+                print('--------------------------------- Signed up successfully ---------------------------------')
+                user_login()
+
+        verification(choice)
+    
+    except:
+        os.system('clear')
+        print("""              
+▗▖ ▗▖▗▄▄▖  ▗▄▖ ▗▖  ▗▖ ▗▄▄▖    ▄ ▄ ▄ ▄ 
+▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌▐▌               
+▐▌ ▐▌▐▛▀▚▖▐▌ ▐▌▐▌ ▝▜▌▐▌▝▜▌            
+▐▙█▟▌▐▌ ▐▌▝▚▄▞▘▐▌  ▐▌▝▚▄▞▘            
+             """)
+        time.sleep(2)
         user_login()
 
-    def verification(choice):
-        if (choice == 1):
-            # cur.execute(f"select * from userinfo where email = '{email}' and password = '{password}'; ")
-            record = easy.select('userinfo', '*', 1, f"password = '{password}' and email = '{email}'")
-            if record != None:
-                os.system('clear')
-                print('Logged in successfully') # go to the main page
-                work()
-            else:
-                os.system('clear'),time.sleep(2)
-                print('--------------------------------- Wrong Credentials ---------------------------------')
-                user_login()
-        elif (choice == 2):
-            cur.execute(f"insert into userinfo (username,password,email,hash)values ('{username}','{password}','{email}','{easy.hashID()}')")
-            db.commit()
-            os.system('clear'),time.sleep(2)
-            print('--------------------------------- Signed up successfully ---------------------------------')
-            user_login()
-
-    verification(choice)
-
 logo = """
+
+
 ▒█▀▀█ ▒█░▒█ ▒█▀▀█ ▒█▀▀▀█      ▒█▀▀█ ▒█▀▀█ ▒█▀▀▀█ 
 ▒█▀▀▄ ▒█░▒█ ▒█░▄▄ ░▀▀▀▄▄  ▀▀  ▒█▄▄█ ▒█▄▄▀ ▒█░░▒█ 
 ▒█▄▄█ ░▀▄▄▀ ▒█▄▄█ ▒█▄▄▄█      ▒█░░░ ▒█░▒█ ▒█▄▄▄█ 

@@ -84,5 +84,12 @@ def loading_bar(total, prefix='Progress:', suffix='Complete', bar_width=50, fill
 
 # Example usage
 
+def load():
+    symbols = ['⣾', '⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽']
+    i = 0
+    for i in range(len(symbols)*10):
+        i = (i + 1) % len(symbols)
+        print('\r\033[K%s exiting...' % symbols[i], flush=True, end='')
+        time.sleep(0.1)
     
 
