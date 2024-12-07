@@ -126,12 +126,14 @@ def assignes():#switch assignes
 def allbugs():
     os.system('clear')
     # print('fetching data ... '), time.sleep(4)
+    cur = db.cursor(dictionary = True)
     easy.loading_bar(100, bar_width=70, delay=0.05), time.sleep(4)
     os.system('clear')
     print('--------------------------------- All Bugs ---------------------------------')
     cur.execute("select * from buginfo")
     print('(bugID, status, description, severity, fixingdays, openingdate, closingdate, priority)\n',*(i for i in cur.fetchall()), sep='\n \n')
     print("PRIORITY => {1:'high', 2:'Medium', 3:'low'}")
+    cur = db.cursor()
 
 def work():
     print('--------------------------------- What you want to do ---------------------------------\n {1} => Edit code status \n {2} => Switch Assignes \n {3} => Bug Report \n {4} => See All bugs \n {5} => Add bugs \n {6} => logout / login \n {7} => EXIT ')
